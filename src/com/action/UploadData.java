@@ -31,14 +31,17 @@ public class UploadData extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	String fileName;
         response.setContentType("text/html;charset=UTF-8");
          Connection con = null;
         PreparedStatement pstm = null;
           try {
               System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             con=DbConnector.getConnection();
+            fileName=request.getParameter("fileName").replace("\\", "\\\\");
+            
             String sql="insert into upload(userid,data_,key_,date_,filename) values('"+request.getSession().getAttribute("userid")+"','"+Utilities.encryptString(request.getParameter("block1"),request.getParameter("secret"))
-                    +"','"+request.getParameter("secret")+"',now(),'"+request.getParameter("fileName")+"')";
+                    +"','"+request.getParameter("secret")+"',now(),'"+fileName+"')";
               System.out.println("..."+sql);
             pstm=con.prepareStatement(sql);
             pstm.executeUpdate();
